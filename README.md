@@ -321,7 +321,7 @@ SELECT
     Weight, 
     SUM(Weight) OVER (ORDER BY weight) AS Cumulative_Weight
 FROM 
-    Order_Details;
+    Order_Details; ```
 
 
 
