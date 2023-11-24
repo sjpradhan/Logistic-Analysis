@@ -39,6 +39,7 @@ This dataset illustrates the associations between specific warehouses (Plants) a
 ## 7. Order list
 This dataset represents various orders, each identified by an Order ID, containing details such as the Order Date, Origin and Destination Ports, Carrier information, Transportation Mode (TPT), Service Level, Ship Ahead Day Count, Ship Late Day Count, Customer details, Product ID, Plant Code, Unit Quantity, and Weight. These details help in analyzing the flow of goods, understanding demand patterns across different locations, and optimizing logistical operations. Analyzing this dataset can provide insights into order processing, shipping efficiency, and inventory management within the logistics network.
 
+```sql
 /*  No. 1
 We have various aspects we can explore. Given the complexity of logistics, perhaps 
 starting with understanding transportation patterns could be beneficial. This involves
