@@ -374,8 +374,11 @@ SELECT
     SUM(Weight) OVER (ORDER BY weight) AS Cumulative_Weight
 FROM 
     Order_Details;
-
+```
+fsdfoierioej ioierouretjdjklfkmfdmfd
 ```python
+import pandas as pd
+```
 
 
 
