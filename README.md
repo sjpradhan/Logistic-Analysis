@@ -91,7 +91,7 @@ direct financial loss to the extent it is caused by proved negligence on
 the part of the Licensor.
 [License](https://opendatacommons.org/licenses/dbcl/1-0/)
 
--- sql Code Block
+```sql 
 /*  No. 1
 We have various aspects we can explore. Given the complexity of logistics, perhaps 
 starting with understanding transportation patterns could be beneficial. This involves
@@ -375,7 +375,7 @@ SELECT
 FROM 
     Order_Details;
 
-
+```python
 
 
 
