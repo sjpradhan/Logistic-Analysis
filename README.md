@@ -321,7 +321,10 @@ SELECT
     Weight, 
     SUM(Weight) OVER (ORDER BY weight) AS Cumulative_Weight
 FROM 
-    Order_Details;\
+    Order_Details;
+
+
+
 
 
 
@@ -363,7 +366,7 @@ FROM
 
 
   
-
+---
 # Database Contents License (DbCL)
 
 The Licensor and You agree as follows:
