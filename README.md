@@ -14,10 +14,8 @@ Dataset is divided into seven tables, one table for all orders that need to be a
 # Tools 
 - Postgresql
 - Python
-  
-  [Raw Data From Kaggle]()
 
-# Table Info:
+# Meta Data:
 
 ## 1. Freight Rates
 This dataset seems to contain details about freight rates for different carriers, specifying various attributes such as weight quantity, costs, service types, transportation modes, and other related information necessary for shipment logistics and cost calculations.
