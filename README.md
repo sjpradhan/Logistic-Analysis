@@ -14,6 +14,7 @@ Dataset is divided into seven tables, one table for all orders that need to be a
 # Tools 
 - Postgresql
 - Python
+  
   [Raw Data From Kaggle]()
 
 # Table Info:
@@ -89,8 +90,10 @@ damages.
 3.3 If liability may not be excluded by law, it is limited to actual and
 direct financial loss to the extent it is caused by proved negligence on
 the part of the Licensor.
+
 [License](https://opendatacommons.org/licenses/dbcl/1-0/)
 
+# Using PostgreSQL
 ```sql 
 /*  No. 1
 We have various aspects we can explore. Given the complexity of logistics, perhaps 
