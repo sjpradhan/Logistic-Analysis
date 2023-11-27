@@ -148,7 +148,88 @@ the part of the Licensor.
 [License](https://opendatacommons.org/licenses/dbcl/1-0/)
 
 # Using PostgreSQL
-```sql 
+```sql
+# Data Validation
+Data validation before analysis is a pivotal step that involves comprehensive checks for several factors. Firstly, it's imperative to ensure the completeness of the dataset, confirming that all required fields are populated. Consistency checks involve verifying uniform data formats, standardized values, and consistent units across entries. Accuracy validation involves cross-referencing the data against trusted sources to ensure its alignment with real-world information. Validity checks ascertain that data entries fall within expected ranges or comply with predefined criteria, further fortifying the dataset's reliability. Maintaining data integrity involves confirming the coherence and relationships between various datasets or tables. Identifying and addressing duplicates is also crucial to prevent skewed analysis results. Finally, assessing the timeliness of data is crucial, ensuring it's up-to-date and relevant for the intended analysis purposes. Integrating these validation steps guarantees the quality and trustworthiness of data for subsequent analysis and decision-making processes.
+select *
+from freight_rates
+
+SELECT
+    SUM(CASE WHEN Carrier IS NULL THEN 1 ELSE 0 END) AS Null_Carrier,
+    SUM(CASE WHEN Origin_PortCd IS NULL THEN 1 ELSE 0 END) AS Null_Origin_PortCd,
+    SUM(CASE WHEN Dest_PortCd IS NULL THEN 1 ELSE 0 END) AS Null_Dest_PortCd,
+    SUM(CASE WHEN min_weight_qty IS NULL THEN 1 ELSE 0 END) AS Null_Min_Weight,
+    SUM(CASE WHEN max_weight_qty IS NULL THEN 1 ELSE 0 END) AS Null_Max_Weight,
+    SUM(CASE WHEN svccd IS NULL THEN 1 ELSE 0 END) AS Null_Svccd,
+	SUM(CASE WHEN minimum_cost IS NULL THEN 1 ELSE 0 END) AS Null_Min_Cost,
+    SUM(CASE WHEN rate IS NULL THEN 1 ELSE 0 END) AS Null_Rate,
+    SUM(CASE WHEN mode_desc IS NULL THEN 1 ELSE 0 END) AS Null_Mode_Desc,
+    SUM(CASE WHEN tpt_day_cnt IS NULL THEN 1 ELSE 0 END) AS Null_Tpt_Day,
+    SUM(CASE WHEN carrier_type IS NULL THEN 1 ELSE 0 END) AS Null_Carrier_type
+FROM Freight_Rates;
+-- Duplicate Check
+WITH DuplicateRows AS 
+(
+   SELECT *,
+          ROW_NUMBER() OVER (PARTITION BY Carrier, Origin_PortCd, Dest_PortCd, Min_Weight_Qty, Max_Weight_Qty, SvcCd, Minimum_Cost, Rate, Mode_Desc, Tpt_Day_Cnt, Carrier_Type ORDER BY Carrier) AS Row_Num
+   FROM Freight_Rates
+)
+select *
+from DuplicateRows
+WHERE Row_Num > 1;
+-- Deleting Duplicate Values
+CREATE TEMP TABLE TempTable AS
+SELECT DISTINCT *
+FROM Freight_Rates;
+
+DELETE FROM Freight_Rates;
+
+INSERT INTO Freight_Rates
+SELECT *
+FROM TempTable;
+
+DROP TABLE TempTable;
+
+-- Update Numeric to float
+
+ALTER TABLE Freight_Rates
+ALTER COLUMN min_weight_qty TYPE FLOAT USING min_weight_qty::FLOAT,
+ALTER COLUMN max_weight_qty TYPE FLOAT USING max_weight_qty::FLOAT,
+ALTER COLUMN Minimum_Cost TYPE FLOAT USING Minimum_Cost::FLOAT,
+ALTER COLUMN Rate TYPE FLOAT USING Rate::FLOAT;
+
+
+select *
+from order_details
+
+UPDATE order_details
+SET order_id = CAST(order_id AS INT);
+
+ALTER TABLE order_details
+ALTER COLUMN weight TYPE FLOAT USING weight::FLOAT;
+
+DO $$ 
+DECLARE
+    columns_list text;
+    null_counts text;
+BEGIN
+    SELECT string_agg('SUM(CASE WHEN ' || column_name || ' IS NULL THEN 1 ELSE 0 END) AS Null_' || column_name, ', ')
+    INTO columns_list
+    FROM information_schema.columns
+    WHERE table_name = 'order_details';
+
+    EXECUTE 'SELECT ' || columns_list || ' FROM order_details' INTO null_counts;
+    RAISE NOTICE '%', null_counts;
+END $$;
+
+select *,
+	row_number() over(partition by Order_ID,Product_ID,Weight) as Row_Num
+from order_details
+order by Row_Num desc
+
+
+
+# Analysis
 /*  No. 1
 We have various aspects we can explore. Given the complexity of logistics, perhaps 
 starting with understanding transportation patterns could be beneficial. This involves
