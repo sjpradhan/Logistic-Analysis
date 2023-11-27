@@ -150,7 +150,8 @@ the part of the Licensor.
 # Using PostgreSQL
 ```sql
 # Data Validation
-Data validation before analysis is a pivotal step that involves comprehensive checks for several factors. Firstly, it's imperative to ensure the completeness of the dataset, confirming that all required fields are populated. Consistency checks involve verifying uniform data formats, standardized values, and consistent units across entries. Accuracy validation involves cross-referencing the data against trusted sources to ensure its alignment with real-world information. Validity checks ascertain that data entries fall within expected ranges or comply with predefined criteria, further fortifying the dataset's reliability. Maintaining data integrity involves confirming the coherence and relationships between various datasets or tables. Identifying and addressing duplicates is also crucial to prevent skewed analysis results. Finally, assessing the timeliness of data is crucial, ensuring it's up-to-date and relevant for the intended analysis purposes. Integrating these validation steps guarantees the quality and trustworthiness of data for subsequent analysis and decision-making processes.
+/*Data validation before analysis is a pivotal step that involves comprehensive checks for several factors. Firstly, it's imperative to ensure the completeness of the dataset, confirming that all required fields are populated. Consistency checks involve verifying uniform data formats, standardized values, and consistent units across entries. Accuracy validation involves cross-referencing the data against trusted sources to ensure its alignment with real-world information. Validity checks ascertain that data entries fall within expected ranges or comply with predefined criteria, further fortifying the dataset's reliability. Maintaining data integrity involves confirming the coherence and relationships between various datasets or tables. Identifying and addressing duplicates is also crucial to prevent skewed analysis results. Finally, assessing the timeliness of data is crucial, ensuring it's up-to-date and relevant for the intended analysis purposes. Integrating these validation steps guarantees the quality and trustworthiness of data for subsequent analysis and decision-making processes.*/
+
 select *
 from freight_rates
 
@@ -161,12 +162,13 @@ SELECT
     SUM(CASE WHEN min_weight_qty IS NULL THEN 1 ELSE 0 END) AS Null_Min_Weight,
     SUM(CASE WHEN max_weight_qty IS NULL THEN 1 ELSE 0 END) AS Null_Max_Weight,
     SUM(CASE WHEN svccd IS NULL THEN 1 ELSE 0 END) AS Null_Svccd,
-	SUM(CASE WHEN minimum_cost IS NULL THEN 1 ELSE 0 END) AS Null_Min_Cost,
+    SUM(CASE WHEN minimum_cost IS NULL THEN 1 ELSE 0 END) AS Null_Min_Cost,
     SUM(CASE WHEN rate IS NULL THEN 1 ELSE 0 END) AS Null_Rate,
     SUM(CASE WHEN mode_desc IS NULL THEN 1 ELSE 0 END) AS Null_Mode_Desc,
     SUM(CASE WHEN tpt_day_cnt IS NULL THEN 1 ELSE 0 END) AS Null_Tpt_Day,
     SUM(CASE WHEN carrier_type IS NULL THEN 1 ELSE 0 END) AS Null_Carrier_type
 FROM Freight_Rates;
+
 -- Duplicate Check
 WITH DuplicateRows AS 
 (
