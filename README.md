@@ -17,26 +17,82 @@ Dataset is divided into seven tables, one table for all orders that need to be a
 
 # Meta Data:
 
-## 1. Freight Rates
+## 1. Order list
+| Field               | Description                                                                                           |
+|---------------------|-------------------------------------------------------------------------------------------------------|
+| Order_ID            | Identifier for each order, potentially unique, representing a specific transaction or purchase.      |
+| Order_Date          | Date when the order was placed.                                                                       |
+| Origin_Port         | Code representing the origin port from where the shipment or order is dispatched.                     |
+| Carrier             | Identifier for the carrier company providing shipping services for the order.                         |
+| TPT                 | Transportation identifier or code.                                                                    |
+| Service_Level       | Indicator representing the type or level of service provided for the order.                            |
+| Ship_Ahead_Day_Count | Number of days the shipment was sent ahead of the scheduled time.                                     |
+| Ship_Late_Day_Count | Number of days the shipment was delayed beyond the scheduled delivery time.                            |
+| Customer            | Identifier or code representing the customer associated with the order.                                |
+| Product_ID          | Identifier for the specific product included in the order.                                             |
+| Plant_Code          | Identifier for the specific warehouse or plant associated with handling the order.                     |
+| Destination_Port    | Code representing the destination port where the shipment is intended to arrive.                        |
+| Unit_Quantity       | Quantity of units or items included in the order.                                                       |
+| Weight              | Weight of the shipment or order.                                                                       |
+
+This dataset represents various orders, each identified by an Order ID, containing details such as the Order Date, Origin and Destination Ports, Carrier information, Transportation Mode (TPT), Service Level, Ship Ahead Day Count, Ship Late Day Count, Customer details, Product ID, Plant Code, Unit Quantity, and Weight. These details help in analyzing the flow of goods, understanding demand patterns across different locations, and optimizing logistical operations. Analyzing this dataset can provide insights into order processing, shipping efficiency, and inventory management within the logistics network.
+
+## 2. Freight Rates
+| Field          | Description                                                                                       |
+|----------------|---------------------------------------------------------------------------------------------------|
+| Carrier        | Identifier for the carrier company providing shipping services.                                    |
+| orig_port_cd   | Code for the origin port where the shipment starts.                                                |
+| dest_port_cd   | Code for the destination port where the shipment is headed.                                        |
+| minm_wgh_qty   | Minimum weight quantity for a shipment to fall into this rate category.                            |
+| max_wgh_qty    | Maximum weight quantity for a shipment to fall into this rate category.                            |
+| svc_cd         | Service code indicating the type of service provided (e.g., DTD - Door to Door).                  |
+| minimum cost   | The minimum cost charged for a shipment within this weight range and service type.                 |
+| rate           | The rate charged per unit of weight for this particular shipment category.                         |
+| mode_dsc       | Description of the mode of transportation (e.g., AIR - air transport).                              |
+| tpt_day_cnt    | Transportation day count indicating the time taken for transportation.                             |
+| Carrier type   | Identifier or classification for the carrier type providing the service.                           |
+
 This dataset seems to contain details about freight rates for different carriers, specifying various attributes such as weight quantity, costs, service types, transportation modes, and other related information necessary for shipment logistics and cost calculations.
 
-## 2. Ware House Cost (WH_Cost)
+## 3. Ware House Cost (WH_Cost)
+| Field        | Description                                              |
+|--------------|----------------------------------------------------------|
+| Plant_Code   | Identifier for the warehouse or plant.                    |
+| Cost_Per_Unit| Cost per unit associated with the warehouse or plant.      |
+
 This dataset seems to detail the cost per unit for various warehouses (identified by their unique codes). The 'WH Cost/unit' column specifies the cost associated with storing products or units per unit of measure in each respective warehouse. Lower costs might indicate more cost-effective storage solutions, impacting inventory management and overall logistics costs within the supply chain.
 
-## 3. Ware House Capacities (WH_Capacites)
+## 4. Ware House Capacities (WH_Capacites)
+| Field          | Description                                         |
+|----------------|-----------------------------------------------------|
+| Plant_ID       | Identifier for the warehouse or plant.               |
+| Daily_Capacity | Daily capacity associated with the warehouse or plant.|
+
 This dataset provides information on the daily capacity of different warehouses identified by their unique Plant IDs. Daily capacity refers to the maximum number of orders or units that each warehouse can process or handle in a single day. Warehouses with higher daily capacities tend to manage larger volumes of orders or inventory, impacting logistics and influencing decisions related to inventory allocation, order fulfillment, and overall supply chain optimization.
 
-## 4. Products per plant
+## 5. Products per plant
+| Field       | Description                                  |
+|-------------|----------------------------------------------|
+| Plant_Code  | Identifier for the specific plant or warehouse.|
+| Product_ID  | Identifier for the product associated with the plant.|
+
 This dataset maps the association between different products and specific warehouses (Plants) where these products are available or stored. Each entry links a unique Product ID to a specific Plant Code, indicating the availability or association of that product within that particular warehouse. Managing product inventories across different warehouses helps in optimizing logistics, ensuring product availability, and efficiently serving diverse customer needs based on regional demand or storage capacity.
 
-## 5. VMI Customers
+## 6. VMI Customers
+| Field       | Description                                   |
+|-------------|-----------------------------------------------|
+| Plant_Code  | Identifier for the specific plant or warehouse.|
+| Customers   | Identifier or classification for the VMI (Vendor-Managed Inventory) customers associated with the respective plant.|
+
 This dataset outlines specific customers associated with different warehouses (Plants). It establishes relationships between particular customers and the warehouses they're allowed to source products from or are exclusively serviced by. This arrangement ensures that certain customers receive products or services from designated warehouses based on agreed-upon arrangements or specific needs. This allocation of customers to particular warehouses can optimize logistics and cater to distinct customer requirements or contractual agreements.
 
-## 6. Plant Port
-This dataset illustrates the associations between specific warehouses (Plants) and the ports they're linked to. These connections indicate the transportation hubs or access points for the warehouses, demonstrating the logistics network's structure and the different points from which goods can enter or exit specific warehouses. Understanding these relationships helps streamline transportation, optimize routes, and facilitate the movement of products to and from warehouses, enhancing overall logistics efficiency.
+## 7. Plant Port
+| Field       | Description                                   |
+|-------------|-----------------------------------------------|
+| Plant_Code  | Identifier for the specific plant or warehouse.|
+| Port        | Code representing the ports associated with the respective plant for transportation or logistics purposes.|
 
-## 7. Order list
-This dataset represents various orders, each identified by an Order ID, containing details such as the Order Date, Origin and Destination Ports, Carrier information, Transportation Mode (TPT), Service Level, Ship Ahead Day Count, Ship Late Day Count, Customer details, Product ID, Plant Code, Unit Quantity, and Weight. These details help in analyzing the flow of goods, understanding demand patterns across different locations, and optimizing logistical operations. Analyzing this dataset can provide insights into order processing, shipping efficiency, and inventory management within the logistics network.
+This dataset illustrates the associations between specific warehouses (Plants) and the ports they're linked to. These connections indicate the transportation hubs or access points for the warehouses, demonstrating the logistics network's structure and the different points from which goods can enter or exit specific warehouses. Understanding these relationships helps streamline transportation, optimize routes, and facilitate the movement of products to and from warehouses, enhancing overall logistics efficiency.
 
 # Database Contents License (DbCL)
 
