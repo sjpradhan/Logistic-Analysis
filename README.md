@@ -151,7 +151,7 @@ the part of the Licensor.
 ## Data Validation
 Data validation before analysis is a pivotal step that involves comprehensive checks for several factors. Firstly, it's imperative to ensure the completeness of the dataset, confirming that all required fields are populated. Consistency checks involve verifying uniform data formats, standardized values, and consistent units across entries. Accuracy validation involves cross-referencing the data against trusted sources to ensure its alignment with real-world information. Validity checks ascertain that data entries fall within expected ranges or comply with predefined criteria, further fortifying the dataset's reliability. Maintaining data integrity involves confirming the coherence and relationships between various datasets or tables. Identifying and addressing duplicates is also crucial to prevent skewed analysis results. Finally, assessing the timeliness of data is crucial, ensuring it's up-to-date and relevant for the intended analysis purposes. Integrating these validation steps guarantees the quality and trustworthiness of data for subsequent analysis and decision-making processes.
 ```sql
--- View Dataset
+-- Exploring Order_details Table
 select *
 from order_details
 
@@ -224,9 +224,24 @@ select *,
 from order_details
 order by Row_Num desc
 
+-- Exploring freight_rates Table
 select *
 from freight_rates
 
+/*
+This SQL query efficiently uses conditional aggregation to count the number of NULL values for each
+column within the Freight_Rates table. Each SUM function with the CASE statement assesses if the specific
+ column is NULL and increments a counter by 1 for every NULL value encountered.
+
+For instance:
+
+Null_Carrier counts the NULL occurrences within the Carrier column.
+Null_Origin_PortCd counts NULLs in the Origin_PortCd column, and so forth for the remaining columns.
+
+This query aggregates the counts for NULL values across multiple columns in the Freight_Rates table.
+It provides a comprehensive summary, showcasing the number of NULLs present in each of the specified columns,
+aiding in data quality assessment.
+*/
 SELECT
     SUM(CASE WHEN Carrier IS NULL THEN 1 ELSE 0 END) AS Null_Carrier,
     SUM(CASE WHEN Origin_PortCd IS NULL THEN 1 ELSE 0 END) AS Null_Origin_PortCd,
@@ -242,6 +257,17 @@ SELECT
 FROM Freight_Rates;
 
 -- Duplicate Check
+
+/* This SQL script checks for duplicate rows within the Freight_Rates table using a Common Table Expression
+ (CTE) named DuplicateRows. It uses the ROW_NUMBER() function to assign a sequential number to each row
+within specific partitions defined by the listed columns (Carrier, Origin_PortCd, Dest_PortCd, Min_Weight_Qty,
+ Max_Weight_Qty, SvcCd, Minimum_Cost, Rate, Mode_Desc, Tpt_Day_Cnt, Carrier_Type) based on the ORDER BY clause.
+
+The Row_Num column identifies the row's position within its partition. Rows with Row_Num > 1 indicate duplicate
+ entries based on the specified columns.
+
+The final SELECT statement retrieves all columns for rows identified as duplicates by having a Row_Num greater
+ than 1, helping to identify and potentially resolve duplicate records in the Freight_Rates table.*/
 WITH DuplicateRows AS 
 (
    SELECT *,
@@ -253,7 +279,24 @@ WITH DuplicateRows AS
 select *
 from DuplicateRows
 WHERE Row_Num > 1;
+
 -- Deleting Duplicate Values
+
+/*
+This SQL script performs a process to remove duplicate entries from the Freight_Rates table:
+
+It creates a temporary table named TempTable using the CREATE TEMP TABLE statement. This table
+contains distinct rows from the original Freight_Rates table. The SELECT DISTINCT * query ensures
+ that only unique rows are stored in this temporary table.
+
+The DELETE FROM Freight_Rates statement removes all existing data from the Freight_Rates table.
+
+The INSERT INTO Freight_Rates SELECT * FROM TempTable command populates the Freight_Rates table
+with the distinct rows stored in the TempTable.
+
+Finally, the DROP TABLE TempTable statement deletes the temporary table, which was used for
+temporary storage during the process.
+*/
 CREATE TEMP TABLE TempTable AS
 SELECT DISTINCT *
 FROM Freight_Rates;
@@ -268,12 +311,19 @@ DROP TABLE TempTable;
 
 -- Update Numeric to float
 
+/*
+The script utilizes the ALTER TABLE command along with the ALTER COLUMN statement to modify
+the data types of the columns min_weight_qty, max_weight_qty, Minimum_Cost, and Rate. The USING
+clause is employed with the ::FLOAT syntax to convert the existing data from the numeric type to
+the float type for these columns in the Freight_Rates table.
+*/
 ALTER TABLE Freight_Rates
 ALTER COLUMN min_weight_qty TYPE FLOAT USING min_weight_qty::FLOAT,
 ALTER COLUMN max_weight_qty TYPE FLOAT USING max_weight_qty::FLOAT,
 ALTER COLUMN Minimum_Cost TYPE FLOAT USING Minimum_Cost::FLOAT,
 ALTER COLUMN Rate TYPE FLOAT USING Rate::FLOAT;
 
+-- Exploring products_per_plant Table
 select *
 from products_per_plant
 where plant_code is null or product_id is null
@@ -283,9 +333,11 @@ select *,
 from products_per_plant
 order by 3 desc;
 
+-- Exploring wh_cost Table
 select *
 from wh_cost;
 
+-- Update Numeric to float
 ALTER TABLE wh_cost
 ALTER COLUMN cost_per_unit TYPE FLOAT USING cost_per_unit::FLOAT;
 
