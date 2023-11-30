@@ -151,15 +151,53 @@ the part of the Licensor.
 ## Data Validation
 Data validation before analysis is a pivotal step that involves comprehensive checks for several factors. Firstly, it's imperative to ensure the completeness of the dataset, confirming that all required fields are populated. Consistency checks involve verifying uniform data formats, standardized values, and consistent units across entries. Accuracy validation involves cross-referencing the data against trusted sources to ensure its alignment with real-world information. Validity checks ascertain that data entries fall within expected ranges or comply with predefined criteria, further fortifying the dataset's reliability. Maintaining data integrity involves confirming the coherence and relationships between various datasets or tables. Identifying and addressing duplicates is also crucial to prevent skewed analysis results. Finally, assessing the timeliness of data is crucial, ensuring it's up-to-date and relevant for the intended analysis purposes. Integrating these validation steps guarantees the quality and trustworthiness of data for subsequent analysis and decision-making processes.
 ```sql
+-- View Dataset
 select *
 from order_details
 
+/*
+This SQL UPDATE statement transforms the 'order_id' column in the 'order_details' table
+from a decimal data type to an integer format. The 'order_id' column originally contained
+decimal values, and this action converts those decimal values to integer values. This change
+might have been necessary to align the data type of the 'order_id' column with the expected
+integer format for better data consistency or compatibility with other operations or analyses
+within the database. The CAST function is used to explicitly convert the data type of the 'order_id'
+column to INT (integer) format in this SQL update operation.
+*/
 UPDATE order_details
 SET order_id = CAST(order_id AS INT);
 
+/*
+This ALTER TABLE statement modifies the data type of the 'weight' column in the 'order_details'
+table to FLOAT. The 'weight' column was previously stored in a different data type format, and
+this statement converts the data type explicitly to FLOAT. The 'USING weight::FLOAT' clause specifies
+the conversion method, utilizing the '::FLOAT' cast to transform the existing data in the 'weight'
+column to the FLOAT data type. This change might have been made to ensure uniform data type consistency
+or accommodate specific analytical requirements necessitating a floating-point numeric format for the
+'weight' column within the 'order_details' table.
+*/
 ALTER TABLE order_details
 ALTER COLUMN weight TYPE FLOAT USING weight::FLOAT;
 
+/*
+DO $$ ... END $$;: This syntax defines a PL/pgSQL anonymous block to execute a sequence of statements
+within PostgreSQL.
+
+DECLARE ... BEGIN ... END;: The DECLARE block is used to declare local variables in the PL/pgSQL block.
+In this case, columns_list and null_counts are declared as text variables.
+
+SELECT string_agg(...) INTO columns_list: This part dynamically constructs a string of SQL statements by
+querying the 'information_schema.columns' view. It aggregates conditional statements for each column in the
+'order_details' table to count NULL values using the SUM(CASE ...) approach. This constructed string is
+stored in the columns_list variable.
+
+EXECUTE 'SELECT ' || columns_list || ' FROM order_details' INTO null_counts;: The EXECUTE command executes
+the dynamically generated SQL query stored in columns_list. It fetches the counts of NULL values for each
+column in the 'order_details' table and stores the result in the null_counts variable.
+
+RAISE NOTICE '%', null_counts;: This raises a NOTICE message containing the counts of NULL values in each
+column of the 'order_details' table, as obtained by the dynamically executed query stored in null_counts.
+*/
 DO $$ 
 DECLARE
     columns_list text;
@@ -174,6 +212,13 @@ BEGIN
     RAISE NOTICE '%', null_counts;
 END $$;
 
+
+/*
+ROW_NUMBER() function aims to identify duplicate rows within the order_details table based on certain
+columns (Order_ID, Product_ID, and Weight). By assigning row numbers within these groups and ordering
+them, we can pinpoint rows with the same combination of values in these columns. This allows us to
+determine potential duplicates or identify rows sharing identical values across these specified columns.
+*/
 select *,
 	row_number() over(partition by Order_ID,Product_ID,Weight) as Row_Num
 from order_details
