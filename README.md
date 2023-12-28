@@ -1,10 +1,10 @@
 # Objective:
-- Understanding transportation patterns, 
-- Optimizing routes,
-- Cost analysis,
-- Inventory management,
-- A/B testing,
-- Demand & Sales Forecast.
+- Data Validation
+- Understanding transportation patterns
+- Optimizing routes
+- Cost analysis
+- Inventory management
+- A/B testing
 
 # About Dataset:
 A real-world dataset of an outbound logistics network is provided by a global microchip producer. The company provided demand data for 9215 orders that need to be routed via their outbound supply chain
