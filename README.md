@@ -162,6 +162,8 @@ the part of the Licensor.
 Data validation before analysis is a pivotal step that involves comprehensive checks for several factors. Firstly, it's imperative to ensure the completeness of the dataset, confirming that all required fields are populated. Consistency checks involve verifying uniform data formats, standardized values, and consistent units across entries. Accuracy validation involves cross-referencing the data against trusted sources to ensure its alignment with real-world information. Validity checks ascertain that data entries fall within expected ranges or comply with predefined criteria, further fortifying the dataset's reliability. Maintaining data integrity involves confirming the coherence and relationships between various datasets or tables. Identifying and addressing duplicates is also crucial to prevent skewed analysis results. Finally, assessing the timeliness of data is crucial, ensuring it's up-to-date and relevant for the intended analysis purposes. Integrating these validation steps guarantees the quality and trustworthiness of data for subsequent analysis and decision-making processes.
 ```sql
 -- Exploring Order_details Table
+set search_path to logistic_analysis;
+
 select *
 from order_details
 
@@ -232,7 +234,7 @@ determine potential duplicates or identify rows sharing identical values across 
 select *,
 	row_number() over(partition by Order_ID,Product_ID,Weight) as Row_Num
 from order_details
-order by Row_Num desc
+order by Row_Num desc;
 
 -- Exploring freight_rates Table
 select *
@@ -336,8 +338,9 @@ ALTER COLUMN Rate TYPE FLOAT USING Rate::FLOAT;
 -- Exploring products_per_plant Table
 select *
 from products_per_plant
-where plant_code is null or product_id is null
+where plant_code is null or product_id is null;
 
+-- Duplicate Check
 select *,
  row_number() over(partition by plant_code,product_id) as rw_number
 from products_per_plant
@@ -385,7 +388,8 @@ SELECT
     svccd AS Service_Level, 
     MIN(minimum_cost) AS Minimum_Cost
 FROM freight_rates
-GROUP BY Carrier, svccd;
+GROUP BY Carrier, svccd
+ORDER BY 3;
 /* No. 3
 The next step is to explore the distribution of shipping weights in our dataset. 
 Understanding the weight distribution can help in optimizing logistics and assessing 
@@ -397,8 +401,8 @@ shipping weights across all orders in the dataset.
 SELECT 
     MIN(weight) AS Min_Weight,
     MAX(weight) AS Max_Weight,
-    ROUND(AVG(weight), 2) AS Avg_Weight,
-    ROUND(STDDEV_POP(weight), 2) AS Std_Dev_Weight
+    AVG(weight) AS Avg_Weight,
+    STDDEV_POP(weight) AS Std_Dev_Weight
 FROM order_details;
 /*No. 4
 Moving forward, we can delve into analyzing transportation patterns. Understanding 
@@ -478,6 +482,7 @@ SELECT
     rate AS cost
 FROM freight_rates
 ORDER BY carrier, min_weight;
+
 /* No. 8
 To delve deeper into optimizing transportation, let's consider analyzing the 
 distribution of weights across different carriers and service levels. This could 
@@ -533,7 +538,7 @@ opportunities.
 
 This query will provide a breakdown of route frequencies between different pairs of 
 origin and destination ports, allowing us to identify the most commonly used routes 
-in your logistics network. This insight could pave the way for route optimization 
+in logistics network. This insight could pave the way for route optimization 
 strategies.
 */
 
@@ -545,7 +550,12 @@ FROM freight_rates
 GROUP BY origin_portcd, dest_portcd
 ORDER BY route_frequency DESC;
 
--- Ranking
+/*No. 11
+The RANK() function is employed to assign a rank to each record within the result set, 
+specifically based on the descending order of weights for each plant. The ranking allows 
+us to quickly identify and prioritize orders with higher weights within each plant.
+*/
+
 SELECT 
     Plant_Code, 
     Order_Date, 
@@ -553,7 +563,8 @@ SELECT
     RANK() OVER (PARTITION BY Plant_Code ORDER BY Weight DESC) AS Weight_Rank
 FROM 
     Order_Details
-/*
+
+/*No. 12
 This query not only shows the basic freight rates details but also calculates 
 additional insights. It computes the average minimum cost by carrier, average rate 
 by service code, as well as the overall minimum cost and maximum rate across the 
@@ -579,9 +590,9 @@ SELECT
 FROM
     Freight_Rates
 	
-/*
+/*No. 13
 This CTE (Total_Plant_Weight) calculates the total weight for each Plant_Code. 
-You can then use this temporary result set in subsequent queries, potentially joining 
+We can then use this temporary result set in subsequent queries, potentially joining 
 it with other tables or performing additional calculations.
 */
 WITH Total_Plant_Weight AS (
@@ -594,7 +605,8 @@ WITH Total_Plant_Weight AS (
         Plant_Code
 )
 SELECT * FROM Total_Plant_Weight;
-/*
+
+/*No. 14
 This CTE calculates the average weight per plant for each order date. The subsequent 
 query fetches the original data, including weight, and adds a column displaying the 
 average weight for each corresponding plant and date. This can help visualize how a 
@@ -620,21 +632,6 @@ FROM
 ORDER BY 
     Plant_Code, 
     Order_Date;
-
--- Moving_Avg_Weight
-SELECT 
-    Order_Date, 
-    Weight, 
-    AVG(Weight) OVER (ORDER BY Order_Date ROWS BETWEEN 3 PRECEDING AND CURRENT ROW) AS Moving_Avg_Weight
-FROM 
-    Order_Details
--- Cumulative_Weight	
-SELECT 
-    Order_Date, 
-    Weight, 
-    SUM(Weight) OVER (ORDER BY weight) AS Cumulative_Weight
-FROM 
-    Order_Details;
 ```
 # Using Python:
 ```python
