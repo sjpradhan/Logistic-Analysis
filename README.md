@@ -633,6 +633,7 @@ ORDER BY
     Plant_Code, 
     Order_Date;
 ```
+!(SQL File)[]
 # A/B - Testing:
 Conducting an A/B test involves comparing two or more groups to assess the impact of a change or intervention. In our case, let's define a clear objective and hypothesis for the A/B test using logistic dataset. Since I've data with order details and freight rates, I can formulate an objective related to optimizing transportation costs.
 
@@ -784,9 +785,38 @@ Where:
 - s is the pooled standard deviation.
 
 ```python
+def cohen_d(group1, group2):
+    n1, n2 = len(group1), len(group2)
+    ```
 
+The function `cohen_d` takes two groups (arrays or lists) as input.
 
+```python
+    mean1, mean2 = np.mean(group1), np.mean(group2)
+    ```
 
+Calculates the means of the two groups using NumPy's `mean` function.
+
+```python
+    var1, var2 = np.var(group1, ddof=1), np.var(group2, ddof=1)
+    ```
+
+Calculates the sample variances for each group using NumPy's `var` function. The `ddof=1` argument adjusts the degrees of freedom for sample variance.
+
+```python
+    pooled_var = ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2)
+    ```
+
+Computes the pooled variance, which is a weighted average of the variances from each group, taking into account the sample sizes.
+
+```python
+    d = (mean1 - mean2) / np.sqrt(pooled_var)
+    ```
+
+Calculates Cohen's d by taking the difference between the means and dividing it by the square root of the pooled variance.
+
+```python
+    return d
 ```
 ## Interpretation of Cohen's d:
 
@@ -800,7 +830,7 @@ __The negative value indicates the direction of the effect:__ a negative Cohen's
 
 __Things to note :__ that statistical significance does not necessarily imply practical importance, and decisions should consider both statistical and practical significance. It's always essential to interpret results in the context of the specific problem or domain knowledge.
 
-
+!(Jupyter Notebook)[]
 
 
 
