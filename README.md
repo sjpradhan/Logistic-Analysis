@@ -779,8 +779,7 @@ Cohen's d is a measure of the effect size, indicating the standardized differenc
 $
 d = \frac{\bar{X}_1 - \bar{X}_2}{s}
 $
-
-[![Formula](https://img.shields.io/badge/Formula-d%20%3D%20%5Cfrac%7B%5Cbar%7BX%7D_1%20-%20%5Cbar%7BX%7D_2%7D%7Bs%7D-brightgreen)](https://www.codecogs.com/latex/eqneditor.php)
+![Formula](C:\Users\pradh\OneDrive\Pictures\Screenshots\Screenshot 2024-01-17 095334.png)
 
 
 Where:
