@@ -633,6 +633,7 @@ ORDER BY
     Plant_Code, 
     Order_Date;
 ```
+# A/B - Testing:
 Conducting an A/B test involves comparing two or more groups to assess the impact of a change or intervention. In our case, let's define a clear objective and hypothesis for the A/B test using logistic dataset. Since I've data with order details and freight rates, I can formulate an objective related to optimizing transportation costs.
 
 ## Objective:
@@ -778,6 +779,9 @@ Cohen's d is a measure of the effect size, indicating the standardized differenc
 $
 d = \frac{\bar{X}_1 - \bar{X}_2}{s}
 $
+
+[![Formula](https://img.shields.io/badge/Formula-d%20%3D%20%5Cfrac%7B%5Cbar%7BX%7D_1%20-%20%5Cbar%7BX%7D_2%7D%7Bs%7D-brightgreen)](https://www.codecogs.com/latex/eqneditor.php)
+
 
 Where:
 
