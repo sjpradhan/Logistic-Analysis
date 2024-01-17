@@ -676,13 +676,130 @@ order_df = pd.read_sql(query_1, engine)
 freight_df = pd.read_sql(query_2, engine) 
 
 engine.dispose()
+
+order_df.head()
+
+freight_df.head()
+
+# Merge datasets based on common columns (e.g., Carrier)
+df = pd.merge(order_df, freight_df, how='inner', on=['carrier'])
+
+df.head()
+
+df['carrier'].unique()
 ```
+## Hypothesis:
+Null Hypothesis (H0): There is no significant difference in transportation costs between A & B carrier types.
+
+Alternative Hypothesis (H1): There is a significant difference in transportation costs between these carrier types.
+```python
+# Define the control (A carrier type) and experimental (B carrier type) groups
+control_group = df[df['carrier'] == 'V444_0'] # A carrier type
+
+experimental_group = df[df['carrier'] == 'V444_1'] # B carrier type
+
+# control_group['minimum_cost'].plot(kind= 'kde')
+
+plt.title('KDE - Plot Of Control Group')
+plt.show()
+
+# experimental_group['minimum_cost'].plot(kind= 'kde')
+
+plt.title('KDE - Plot Of experimental_group')
+plt.show()
+
+# Calculate transportation costs for each group
+control_costs = control_group['unit_quantity'] * control_group['minimum_cost']
+
+experimental_costs = experimental_group['unit_quantity'] * experimental_group['minimum_cost']
+
+# Perform t-test to compare means
+t_stat, p_value = ttest_ind(control_costs, experimental_costs)
+
+# Set significance level
+alpha = 0.05
+
+# Compare p-value with significance level
+if p_value < alpha:
+    print(f"Reject the null hypothesis. There is a significant difference in transportation costs.")
+else:
+    print("Fail to reject the null hypothesis. There is no significant difference in transportation costs.")
+```
+## Interpreting A/B test result : 
+
+### Throughout A/B test I have conclude that their is a signifacnt difference between two carrier. But which one is better ?
+
+__To make a decision based on the result of our A/B test, it will good to consider these factors:__
+
+__Evaluate Effect Size:__
+
+Calculate and examine the effect size (e.g., Cohen's d) to understand the magnitude of the difference between the two carrier types. This will provide insight into the practical significance of the observed effect.
+
+__Consider Business Goals:__
+
+Align the results with the business goals and objectives. Identify which carrier type aligns better with the overall goals of the logistics and supply chain operations.
+
+__Cost-Benefit Analysis:__
+
+Conduct a cost-benefit analysis to assess the impact of the cost difference on overall business. Consider not only the financial aspects but also other qualitative factors like reliability, customer satisfaction, and delivery times.
+
+__Involve Stakeholders:__
+
+Engage relevant stakeholders, including those from logistics, finance, and customer service. Gather input from different perspectives to ensure a comprehensive understanding of the implications of choosing one carrier over the other.
+
+__Explore Long-Term Impact:__
+
+Consider the long-term implications of selecting a specific carrier. Some carriers may offer discounts for long-term partnerships, and a stable and reliable carrier relationship can contribute to the success of supply chain.
+
+__Risk Assessment:__
+
+Assess any risks associated with each carrier type. Evaluate factors such as the carrier's track record, potential disruptions, and the resilience of their operations.
+
+__Decision Framework:__
+
+Establish a decision framework that incorporates both quantitative and qualitative factors. Assign weights to different criteria based on their importance to the business, and use a systematic approach to evaluate the options.
+
+__Consult Data Trends:__
+
+Examine trends in historical data related to the carriers. Look for patterns or fluctuations that might impact decision. For example, a carrier's performance during peak seasons or specific months could be crucial.
+
+__Feedback Loop:__
+
+Establish a feedback loop to monitor the ongoing performance of the selected carrier. Regularly assess whether the carrier continues to meet expectations and make adjustments as needed.
+
+__Documentation:__
+
+Document the decision-making process and the rationale behind our choice. This documentation can serve as a reference for future decisions and audits.
+
+## I'm considering Cohen's d for now :
+
+Cohen's d is a measure of the effect size, indicating the standardized difference between two means. We can calculate Cohen's d using the following formula:
+
+$
+d = \frac{\bar{X}_1 - \bar{X}_2}{s}
+$
+
+Where:
+
+- X̄₁ & X̄₂ are the means of the two groups.
+- s is the pooled standard deviation.
+
+```python
 
 
 
+```
+## Interpretation of Cohen's d:
 
+Small effect: 0.2 ≤ d < 0.5
 
+Medium effect: 0.5 ≤ d <0.8
 
+Large effect: d ≥ 0.8
+
+__The negative value indicates the direction of the effect:__ a negative Cohen's d suggests that the experimental group (B carrier type) has a lower mean transportation cost than the control group (A carrier type). The magnitude of Cohen's d (-0.1559) indicates a small effect size.
+
+__Things to note :__ that statistical significance does not necessarily imply practical importance, and decisions should consider both statistical and practical significance. It's always essential to interpret results in the context of the specific problem or domain knowledge.
 
 
 
