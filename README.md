@@ -633,17 +633,50 @@ ORDER BY
     Plant_Code, 
     Order_Date;
 ```
+Conducting an A/B test involves comparing two or more groups to assess the impact of a change or intervention. In our case, let's define a clear objective and hypothesis for the A/B test using logistic dataset. Since I've data with order details and freight rates, I can formulate an objective related to optimizing transportation costs.
+
+## Objective:
+
+To determine whether a change in freight rates for two different carrier type significantly impacts transportation costs for order deliveries.
+
+## Steps to Implement:
+
+Identify orders with the A carrier type and the B carrier type.
+
+Calculate transportation costs for each order based on the corresponding freight rates.
+
+Split the dataset into control and experimental groups.
+
+Conduct the A/B test using statistical analysis.
+
 # Using Python:
+
+## Importing Libraries :
 ```python
 import pandas as pd
 import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt
+import sqlalchemy
+pd.set_option('display.max_columns', None)
 import warnings
-warnings.filterwarngis('ignore')
+warnings.filterwarnings('ignore')
+from scipy.stats import t
+from scipy.stats import ttest_ind
 ```
+## Import data from database :
+```python
+engine = sqlalchemy.create_engine('postgresql://postgres:4545@localhost/analysis_in_python')
 
+query_1 = "SELECT * FROM logistic_analysis.order_details;"
 
+query_2 = "SELECT * FROM logistic_analysis.freight_rates;"
+
+order_df = pd.read_sql(query_1, engine)
+
+freight_df = pd.read_sql(query_2, engine) 
+
+engine.dispose()
+```
 
 
 
