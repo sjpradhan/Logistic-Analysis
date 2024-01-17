@@ -633,7 +633,7 @@ ORDER BY
     Plant_Code, 
     Order_Date;
 ```
-!(SQL File)[]
+!(SQL File)[https://github.com/sjpradhan/Logistic-Analysis/blob/gh-pages/SQL%20File.sql]
 # A/B - Testing:
 Conducting an A/B test involves comparing two or more groups to assess the impact of a change or intervention. In our case, let's define a clear objective and hypothesis for the A/B test using logistic dataset. Since I've data with order details and freight rates, I can formulate an objective related to optimizing transportation costs.
 
@@ -820,7 +820,7 @@ __The negative value indicates the direction of the effect:__ a negative Cohen's
 
 __Things to note :__ that statistical significance does not necessarily imply practical importance, and decisions should consider both statistical and practical significance. It's always essential to interpret results in the context of the specific problem or domain knowledge.
 
-!(Jupyter Notebook)[]
+!(Jupyter Notebook)[https://github.com/sjpradhan/Logistic-Analysis/blob/gh-pages/A-B%20Testing.ipynb]
 
 
 
