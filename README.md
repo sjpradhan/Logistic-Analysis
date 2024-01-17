@@ -785,38 +785,28 @@ Where:
 - s is the pooled standard deviation.
 
 ```python
+# The function `cohen_d` takes two groups (arrays or lists) as input.
 def cohen_d(group1, group2):
     n1, n2 = len(group1), len(group2)
-    ```
-
-The function `cohen_d` takes two groups (arrays or lists) as input.
-
-```python
+    
+    # Calculates the means of the two groups using NumPy's `mean` function.
     mean1, mean2 = np.mean(group1), np.mean(group2)
-    ```
-
-Calculates the means of the two groups using NumPy's `mean` function.
-
-```python
+    
+    # Calculates the sample variances for each group using NumPy's `var` function. The `ddof=1` argument 
+    #adjusts the degrees of freedom for sample variance.
     var1, var2 = np.var(group1, ddof=1), np.var(group2, ddof=1)
-    ```
-
-Calculates the sample variances for each group using NumPy's `var` function. The `ddof=1` argument adjusts the degrees of freedom for sample variance.
-
-```python
+    
+    # Computes the pooled variance, which is a weighted average of the variances from each group, taking into 
+    #account the sample sizes.
     pooled_var = ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2)
-    ```
-
-Computes the pooled variance, which is a weighted average of the variances from each group, taking into account the sample sizes.
-
-```python
+    
+    # Calculates Cohen's d by taking the difference between the means and dividing it by the square root of the pooled variance.
     d = (mean1 - mean2) / np.sqrt(pooled_var)
-    ```
-
-Calculates Cohen's d by taking the difference between the means and dividing it by the square root of the pooled variance.
-
-```python
+    
     return d
+
+cohen_d_value = cohen_d(experimental_costs, control_costs)
+print(f"Cohen's d: {cohen_d_value}")
 ```
 ## Interpretation of Cohen's d:
 
