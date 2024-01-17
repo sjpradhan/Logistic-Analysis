@@ -776,7 +776,7 @@ Document the decision-making process and the rationale behind our choice. This d
 
 Cohen's d is a measure of the effect size, indicating the standardized difference between two means. We can calculate Cohen's d using the following formula:
 
-d = \frac{\bar{X}_1 - \bar{X}_2}{2s}
+\[d = \frac{\bar{X}_1 - \bar{X}_2}{2s}\]
 
 Where:
 
